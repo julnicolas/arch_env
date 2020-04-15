@@ -1,8 +1,31 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Variables
+# GUI-related env variables
+
+# Firefox
+export MOZ_ENABLE_WAYLAND=1
+
+# Qt5
+export QT_QPA_PLATFORM=wayland-egl
+export QT_WAYLAND_FORCE_DPI=physical
+export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
+
+# Elementary/EFL
+export ECORE_EVAS_ENGINE=wayland_egl
+export ELM_ENGINE=wayland_egl
+
+# SDL
+# Caution - this variable may cause old games to crash
+# used SDL_VIDEODRIVER=x11 instead
+export SDL_VIDEODRIVER=wayland
+
+# Java under xwayland
+export _JAVA_AWT_WM_NONREPARENTING=1
+
 # Aliases
-#Git
+# Git
 alias gss='git status -s'
 alias glo='git log --oneline'
 
