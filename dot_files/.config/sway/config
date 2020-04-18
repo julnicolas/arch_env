@@ -210,6 +210,14 @@ bindsym XF86MonBrightnessUp exec sudo brightnessctl set 5%+
 #
 bindsym XF86AudioRaiseVolume exec ponymix increase 5
 bindsym XF86AudioLowerVolume exec ponymix decrease 5
+bindsym ctrl+XF86AudioLowerVolume exec ponymix toggle
+
+#
+# Mic control
+#
+bindsym shift+XF86AudioRaiseVolume exec ponymix --source increase 5
+bindsym shift+XF86AudioLowerVolume exec ponymix --source decrease 5
+bindsym ctrl+shift+XF86AudioLowerVolume exec ponymix --source toggle
 
 # Status Bar:
 #
