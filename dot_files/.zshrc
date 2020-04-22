@@ -38,13 +38,6 @@ alias instafame_db='psql -h db344862-instafame.sql-pro.online.net -d db344862_in
 alias ls='ls --color=auto'
 PS1='[\u@\h \W]\$ '
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-
-if command -v pyenv 1>/dev/null 2>&1; then
-	eval "$(pyenv init -)"
-fi
-
 # Path to your oh-my-zsh installation.
 export ZSH="/home/jnicolas/.oh-my-zsh"
 
