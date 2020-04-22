@@ -28,7 +28,21 @@ Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " Python auto-completion
+" Check on github how to install. Various steps are needed.
 Bundle 'Valloric/YouCompleteMe'
+
+" Syntax check
+Plugin 'vim-syntastic/syntastic'
+
+" File tree
+Plugin 'scrooloose/nerdtree'
+
+" Custom vim status bar
+" Open bar typing :NERDTree .
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+" Git icons for NERDTree
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -57,6 +71,14 @@ set foldmethod=indent
 set foldlevel=99
 nnoremap <space> za
 
+" NERDTree settings
+" Open NERDTree automaticaly when starting vim without a file name
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Open NERDTree with CTRL N
+map <C-n> :NERDTreeToggle<CR>
+
 " Enable go-to-definition
 " By default the leader key is mapped to \
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
@@ -82,9 +104,18 @@ import sys
 if 'VIRTUAL_ENV' in os.environ:
 	project_base_dir = os.environ['VIRTUAL_ENV']
 	activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-	#execfile(activate_this, dict(__file__=activate_this))
 	exec(open(activate_this).read(), dict(__file__=activate_this))
 EOF
+
+" Enable pylint with syntactic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " js, css, html, json, yaml
 au BufNewFile,BufRead *.js, *.html, *.css, *.json, *.yaml, *.yml
