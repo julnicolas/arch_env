@@ -211,6 +211,11 @@ bindsym XF86MonBrightnessDown exec sudo brightnessctl set 5%-
 bindsym XF86MonBrightnessUp exec sudo brightnessctl set 5%+
 
 #
+# Nightshift control
+#
+bindsym ctrl+XF86MonBrightnessDown exec killall redshift || redshift -PO 3500K
+
+#
 # Sound control
 #
 #
