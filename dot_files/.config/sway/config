@@ -198,6 +198,12 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 #
+# Screenshot controls
+#
+bindsym Print exec grim ~/snapshots/snapshot_$(uuidgen -r).png
+bindsym ctrl+Print exec grim -g "$(slurp)" ~/snapshots/snapshot_$(uuidgen -r).png
+
+#
 # Backlight control
 #
 #
