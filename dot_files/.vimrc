@@ -34,6 +34,9 @@ Bundle 'Valloric/YouCompleteMe'
 " Syntax check
 Plugin 'vim-syntastic/syntastic'
 
+" Ansible syntax highlignting and file recognition
+Plugin 'pearofducks/ansible-vim'
+
 " File tree
 Plugin 'scrooloose/nerdtree'
 
@@ -92,6 +95,10 @@ set shiftwidth=4
 au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
+" Ansible-specific config
+au BufRead,BufNewFile */playbooks/*.{yaml,yml} set filetype=yaml.ansible
+au BufRead,BufNewFile */roles/*.{yaml,yml} set filetype=yaml.ansible
+
 " Python files' config
 au BufNewFile,BufNewFile *.py
 	\ set tabstop=4
@@ -111,7 +118,9 @@ if 'VIRTUAL_ENV' in os.environ:
 	exec(open(activate_this).read(), dict(__file__=activate_this))
 EOF
 
-" Enable pylint with syntactic
+" Enable linting with syntactic
+" Pylint for python (filetype=python)
+" ansible-lint for ansible (filetype=ansible or yaml.ansible)
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
