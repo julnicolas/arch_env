@@ -88,6 +88,10 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 
+" yaml
+au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
 " Python files' config
 au BufNewFile,BufNewFile *.py
 	\ set tabstop=4
@@ -113,12 +117,7 @@ set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+" The command below displays the loc list (list of errors and warnings)
+" let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-
-" js, css, html, json, yaml
-au BufNewFile,BufRead *.js, *.html, *.css, *.json, *.yaml, *.yml
-    \ set tabstop=2
-    \ set softtabstop=2
-    \ set shiftwidth=2
