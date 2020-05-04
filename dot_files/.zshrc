@@ -1,6 +1,9 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+# Add pip modules to path
+export PATH=~/.local/bin:$PATH
+
 # Variables
 # GUI-related env variables
 
@@ -8,7 +11,8 @@
 export MOZ_ENABLE_WAYLAND=1
 
 # Qt5
-export QT_QPA_PLATFORM=wayland-egl
+#Plugin below cannot be found by some apps
+#export QT_QPA_PLATFORM=wayland-egl
 export QT_WAYLAND_FORCE_DPI=physical
 export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 
