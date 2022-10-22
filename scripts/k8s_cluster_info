@@ -1,0 +1,26 @@
+#!/bin/sh
+
+if ! which kubectl > /dev/null 2>&1; then
+	exit 0
+fi
+
+CLUSTER="$(kubectl config view | grep current-context | cut -d ':' -f2-2 | tr -d ' ')"
+if [ $? -ne 0 ]; then
+	exit 0
+fi
+
+COLD_COLOR=104m
+WARM_COLOR=198m
+output () {
+	# $1 contains the display color
+	# $2 contains the cluster name
+	echo -e " \033[38;5;$1[$2]\033[0m"
+}
+
+# Warm color (pink) if it's a prod cluster
+if [ -n "$(echo "$CLUSTER" | grep -i 'prod')" ]; then
+	output "$WARM_COLOR" "$CLUSTER"
+else
+	# Cold color (purple) if it's a dev cluster
+	output "$COLD_COLOR" "$CLUSTER"
+fi
