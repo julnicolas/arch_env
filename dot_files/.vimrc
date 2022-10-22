@@ -98,6 +98,8 @@ finally
 	set encoding=utf-8
 	syntax on
 	colorscheme koehler
+	hi Normal guibg=NONE ctermbg=NONE
+	highlight EndOfBuffer ctermfg=black ctermbg=NONE
 	set nu
 	" vertical split below active buffer by default
 	set splitbelow
@@ -160,7 +162,7 @@ finally
 	""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	" Split bar
 	""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	hi VertSplit ctermbg=120 ctermfg=0
+	hi VertSplit ctermbg=NONE ctermfg=120
 	
 	""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 	" Tab bar
@@ -192,21 +194,21 @@ finally
 	function! SetCursorLineNrColorVisual()
 	  set updatetime=0
 	
-	  " Visual mode: orange
+	  " Visual mode: green
 	  hi statusline ctermbg=120 ctermfg=232
 	endfunction
 	
 	function! ResetCursorLineNrColor()
-	  set updatetime=4000
-	  hi statusline ctermfg=230 ctermbg=202
+	  set updatetime=1000
+	  hi statusline ctermfg=230 ctermbg=61
 	endfunction
 	
 	" Insert mode
 	au InsertEnter * call InsertStatuslineColor(v:insertmode)
-	au InsertLeave * hi statusline ctermfg=230 ctermbg=202
+	au InsertLeave * hi statusline ctermfg=230 ctermbg=61
 	
 	" Visual mode
-	"vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
+	vnoremap <silent> <expr> <SID>SetCursorLineNrColorVisual SetCursorLineNrColorVisual()
 	nnoremap <silent> <script> v v<SID>SetCursorLineNrColorVisual
 	nnoremap <silent> <script> V V<SID>SetCursorLineNrColorVisual
 	nnoremap <silent> <script> <C-v> <C-v><SID>SetCursorLineNrColorVisual
@@ -217,10 +219,13 @@ finally
 	augroup END
 	
 	" default statusline color
-	hi statusline ctermfg=230 ctermbg=202
+	hi statusline ctermfg=230 ctermbg=61
 	
 	" inactive panes' status-line color
-	hi StatusLineNC ctermbg=250 ctermfg=130
+	hi StatusLineNC ctermbg=250 ctermfg=61
+
+	" Do not show edition mode
+	set noshowmode
 	
 	" Formats the statusline
 	set laststatus=2							" always enable status bar
