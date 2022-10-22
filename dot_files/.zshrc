@@ -1,15 +1,88 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=~/go/bin:~/bin:~/scripts:"$PATH"
+
+# Aliases
+alias lsf="ls -F | grep -ve '^.*/$'" # ls files only
+alias lsd="ls -F | grep -e '^.*/$' --color=never" # ls directories only
+alias gss="git status"
+alias glo="git log --oneline"
+alias gfi="git diff-tree --name-only -r --no-commit-id"
+alias gsc="git show --compact-summary"
+#alias daxfr="dig +noedns axfr mydomain.fr @ip"
+alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
+
+#### VENV UTILITIES
+
+# Create a virtual environment for python 3.8
+# create_3_8_venv myvenv
+# create_3_8_venv --dev-modules myvenv
+#create_3_8_venv()
+# {
+#	local VENV_NAME="$1"
+#	local DEV_MODULES='false'
+#	if [ "$1" = '--dev-modules' ]; then
+#		DEV_MODULES='true'
+#		VENV_NAME="$2"
+#	fi
+#
+#	if [ -z "$VENV_NAME" ]; then
+#		echo 'missing venv name'
+#		exit 1
+#	fi
+#
+#	# Create venv
+#	PYTHON=$(scl enable rh-python38 'bash -c "echo $(which python)"')
+#	if ! scl enable rh-python38 "bash -c '$PYTHON -m venv ~/.venvs/$VENV_NAME'"; then
+#		exit 1
+#	fi
+#
+#	# Source venv to install dev modules if --dev-modules is provided
+#	if [ "$DEV_MODULES" = 'true' ]; then
+#		source_venv "$VENV_NAME"
+#		pip install ipython
+#		alias ipython='python -m IPython'
+#	fi
+#}
+
+# Source a virtual environment
+source_venv()
+{
+	local VENV_NAME="$1"
+	if [ -z "$VENV_NAME" ]; then
+		echo 'missing venv name'
+		exit 1
+	fi
+
+	# ~ is not evaluated as local path if in the quotes
+	source ~"/.venvs/$VENV_NAME/bin/activate"
+}
+
+# list_venvs
+ls_venvs()
+{
+	ls -1 ~/.venvs
+}
+
+# remove a python virtual env
+rm_venv()
+{
+	local VENV_NAME="$1"
+	if [ -z "$VENV_NAME" ]; then
+		echo 'missing venv name'
+		exit 1
+	fi
+
+	rm -rf ~/.venvs/"$VENV_NAME"
+}
+########
 
 # Path to your oh-my-zsh installation.
-export ZSH="/home/nicolasj/.oh-my-zsh"
-export GIT_PAGER=cat
+export ZSH=~"/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="muse"
+ZSH_THEME="dracula-julien"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -46,8 +119,6 @@ ZSH_THEME="muse"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -72,8 +143,10 @@ ZSH_THEME="muse"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-	git
+	#git
+	colored-man-pages
 	zsh-autosuggestions
+	zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -103,4 +176,4 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /home/nicolasj/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# Observability Profile
