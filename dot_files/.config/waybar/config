@@ -25,6 +25,7 @@
     "modules-center": [
     ],
     "modules-right": [
+        "backlight",
         "pulseaudio",
         "network",
         "memory",
@@ -38,6 +39,12 @@
     // -------------------------------------------------------------------------
     // Modules
     // -------------------------------------------------------------------------
+    "backlight": {
+        "device": "intel_backlight",
+        "format": "{percent}% {icon}",
+        "format-icons": ["☀"]
+    },
+
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon} {format_source}",
@@ -113,7 +120,8 @@
         "format-wifi": "  {essid} ({signalStrength}%)", // Icon: wifi
         "format-ethernet": "  {ifname}: {ipaddr}/{cidr}", // Icon: ethernet
         "format-disconnected": "⚠  Disconnected",
-        "tooltip-format": "{ifname}: {ipaddr}"
+        "tooltip-format": "{ifname}: {ipaddr}",
+        "on-click": "iwctl_station_get-networks wlan0"
     },
 
     "sway/mode": {
