@@ -1,0 +1,21 @@
+#!/bin/zsh
+
+# This script takes a prompt string and colors it depending 
+# on the error status of the previous command.
+#
+# It actually returns a string that is expandable by zsh. 
+# This is mandatory to react on $? as it is evaluated once at the start
+# of the prompt script.
+# Whereas, using the expandable %? tells zsh to use the latest error code
+# when reading this pattern.
+
+PROMPT='#'
+if [ -n "$1" ]; then
+	PROMPT="$1"
+fi
+
+SUCCESS=104 # Purple
+ERROR=197   # Red
+
+# If error code == 0 use success color, use error if not
+echo "%(?.%F{$SUCCESS}.%F{$ERROR})$PROMPT%f"
