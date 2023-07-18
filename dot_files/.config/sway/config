@@ -19,12 +19,12 @@ set $term foot
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 # Custom - use kickoff and run kickoff only once (singleton pattern)
-set $menu test $(pidof kickoff | wc -l) -eq 0 &&  kickoff
+set $menu test $(pidof kickoff | wc -l) -eq 0 && kickoff
 
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
-output * scale 3
+output * scale 3.125
 output * bg ~/images/wallpapers/vader.jpg fill
 #
 # Example configuration:
