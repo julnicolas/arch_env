@@ -265,4 +265,9 @@ bindsym shift+XF86AudioMute exec pulseaudio-ctl mute-input
 
 exec_always ~/.config/waybar/waybar.sh
 
+#
+# Apps to start in floating mode
+#
+for_window [app_id=".*[Tt]hunderbird.*"] floating enable
+
 include /etc/sway/config.d/*
