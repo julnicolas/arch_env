@@ -46,6 +46,14 @@ try
 	
 	" Simplify vim-pane navigation and make it consistent with tmux
 	Plugin 'christoomey/vim-tmux-navigator'
+
+	" Quote/unquote words easily
+	" ysiw" to surround a word pointed by cursor in double quotes
+	" ysiw' to surround a word pointed by cursor in single quotes
+	" yss(  to add surrounding parentheses for the whole line 
+	" ds"   to remove double quotes on word pointed by  cursor
+	" cs'"  change surrounding ' to " on word pointed by cursor
+	Plugin 'tpope/vim-surround'
 	
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
