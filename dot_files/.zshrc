@@ -1,6 +1,9 @@
-export PATH=~/go/bin:~/bin:~/scripts:"$PATH"
+#export PATH="~/go/bin:~/bin:~/scripts:~/.local/bin:$PATH"
+export PATH="/home/julien/scripts:/home/julien/.local/bin:$PATH"
 
 # Aliases
+alias copy='wl-copy'   # copy stdin to clipboard
+alias paste='wl-paste' # display clipboard to stdout
 alias lsf="ls -F | grep -ve '^.*/$'" # ls files only
 alias lsd="ls -F | grep -e '^.*/$' --color=never" # ls directories only
 alias gss="git status"
@@ -10,38 +13,63 @@ alias gsc="git show --compact-summary"
 #alias daxfr="dig +noedns axfr mydomain.fr @ip"
 alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
 
+### Fzf with preview mode
+# $1 is the language parameter (-l) for bat
+#
+# dependencies: bat, fzf
+fzfp() {
+	if [ -n "$1" ]; then
+		PLANG="-l $1"
+	fi
+	fzf --preview="bat --color always $PLANG {}"
+}
+
+### Fzf with preview mode for text browsing
+# $1 is the text file to look into
+#
+# dependencies: bat, fzf
+fzft() {
+	if [ -z "$1" ]; then
+		echo 'error - missing input text file'
+		return 1
+	fi
+
+	TEXT_FILE="$1"
+	fzf --preview="grep -A 10 {} < $TEXT_FILE | bat --color always -l man" < "$TEXT_FILE"
+}
+
+### Man with wings
+#
+#dependencies: man, bat
+ban() {
+	man $@ | bat -l man --style plain
+}
+
 #### VENV UTILITIES
 
-# Create a virtual environment for python 3.8
-# create_3_8_venv myvenv
-# create_3_8_venv --dev-modules myvenv
-#create_3_8_venv()
-# {
-#	local VENV_NAME="$1"
-#	local DEV_MODULES='false'
-#	if [ "$1" = '--dev-modules' ]; then
-#		DEV_MODULES='true'
-#		VENV_NAME="$2"
-#	fi
-#
-#	if [ -z "$VENV_NAME" ]; then
-#		echo 'missing venv name'
-#		exit 1
-#	fi
-#
-#	# Create venv
-#	PYTHON=$(scl enable rh-python38 'bash -c "echo $(which python)"')
-#	if ! scl enable rh-python38 "bash -c '$PYTHON -m venv ~/.venvs/$VENV_NAME'"; then
-#		exit 1
-#	fi
-#
-#	# Source venv to install dev modules if --dev-modules is provided
-#	if [ "$DEV_MODULES" = 'true' ]; then
-#		source_venv "$VENV_NAME"
-#		pip install ipython
-#		alias ipython='python -m IPython'
-#	fi
-#}
+# Create a virtual environment for the active pyenv-enabled python version
+# create_venv myvenv
+create_venv()
+{
+	echo 'creating a virtual environment for the active pyenv-enabled python version'
+	echo "enabled version - $(pyenv version)"
+
+	if ! which pyenv > /dev/null; then
+		echo 'error - pyenv is not installed'
+		exit 1
+	fi
+
+	local VENV_NAME="$1"
+	if [ -z "$VENV_NAME" ]; then
+		echo 'missing venv name'
+		exit 1
+	fi
+
+	# Create venv
+	if ! pyenv exec python -m venv ~"/.venvs/$VENV_NAME"; then
+		exit 1
+	fi
+}
 
 # Source a virtual environment
 source_venv()
@@ -73,6 +101,7 @@ rm_venv()
 
 	rm -rf ~/.venvs/"$VENV_NAME"
 }
+
 ########
 
 # Path to your oh-my-zsh installation.
@@ -149,6 +178,18 @@ plugins=(
 	zsh-syntax-highlighting
 )
 
+# zsh-autosuggestion
+typeset -A ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#656d67'
+
+#zsh-highlighting
+# main plugin - change default colors
+# Declare the variable
+typeset -A ZSH_HIGHLIGHT_STYLES
+
+#ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#656d67'
+ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#ff005f'
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -177,3 +218,10 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 # Observability Profile
+
+# opam configuration
+[[ ! -r /home/julien/.opam/opam-init/init.zsh ]] || source /home/julien/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+
+# import my created dependencies
+source ~/.shell_profiles/zsh/arch_linux/*
+
