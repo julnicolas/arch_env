@@ -245,6 +245,11 @@ bindsym shift+XF86AudioRaiseVolume exec ponymix --source increase 5
 bindsym shift+XF86AudioLowerVolume exec ponymix --source decrease 5
 bindsym shift+XF86AudioMute exec pulseaudio-ctl mute-input
 
+#
+# Keyboard layout control
+#
+bindsym $mod+y exec python ~/scripts/keyboard/roll_active_mapping.py
+
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.
