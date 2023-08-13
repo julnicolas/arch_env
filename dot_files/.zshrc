@@ -18,6 +18,19 @@ alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
 # Either 'light' or 'dark'
 scheme="light"
 
+# ZSH theme configuration
+zsh_theme_dark="dracula-julien"
+zsh_theme_light="dracula-julien-light"
+
+zsh_set_theme() {
+	ZSH_THEME="$zsh_theme_dark"
+	if [ "$scheme" = "light" ]; then
+		ZSH_THEME="$zsh_theme_light"
+	fi
+}
+
+zsh_set_theme
+
 # Loads selected dark or light theme
 load_theme() {
 	if [ "$scheme" = "dark" ];then
@@ -37,6 +50,7 @@ toggle_theme() {
 		scheme="dark"
 	fi
 	load_theme
+	zsh_set_theme
 }
 
 # Toggle theme if SIGUSR1 is received
@@ -155,7 +169,10 @@ export ZSH=~"/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="dracula-julien"
+#
+#Theme is defined above, right next to toggle_theme
+#ZSH_THEME="dracula-julien"
+
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
