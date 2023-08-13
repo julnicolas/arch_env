@@ -13,6 +13,41 @@ alias gsc="git show --compact-summary"
 #alias daxfr="dig +noedns axfr mydomain.fr @ip"
 alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
 
+### Light and Dark theme-toggle
+# Defines the type of theme in use
+# Either 'light' or 'dark'
+scheme="light"
+
+# Loads selected dark or light theme
+load_theme() {
+	if [ "$scheme" = "dark" ];then
+		theme.sh dracula
+	elif [ "$scheme" = "light" ]; then
+		theme.sh github-light-colorblind
+	fi
+}
+load_theme
+
+# Toggle active theme, if it's light then
+# load dark and conversely
+toggle_theme() {
+	if [ "$scheme" = "dark" ]; then
+		scheme="light"
+	else
+		scheme="dark"
+	fi
+	load_theme
+}
+
+# Toggle theme if SIGUSR1 is received
+trap toggle_theme SIGUSR1
+
+# Sends a signal to all open terminals to toggle
+# their theme
+toggle_all_term_themes() {
+	pkill -SIGUSR1 zsh
+}
+
 ### Fzf with preview mode
 # $1 is the language parameter (-l) for bat
 #
@@ -21,7 +56,12 @@ fzfp() {
 	if [ -n "$1" ]; then
 		PLANG="-l $1"
 	fi
-	fzf --preview="bat --color always $PLANG {}"
+
+	local theme
+	if [ "$scheme" = "light" ]; then
+		theme="--theme=gruvbox-light"
+	fi
+	fzf --exact --preview="bat $theme --color always $PLANG {}"
 }
 
 ### Fzf with preview mode for text browsing
@@ -35,7 +75,11 @@ fzft() {
 	fi
 
 	TEXT_FILE="$1"
-	fzf --preview="grep -A 10 {} < $TEXT_FILE | bat --color always -l man" < "$TEXT_FILE"
+	local theme
+	if [ "$scheme" = "light" ]; then
+		theme="--theme=gruvbox-light"
+	fi
+	fzf --preview="grep -A 10 {} < $TEXT_FILE | bat $scheme --color always -l man" < "$TEXT_FILE"
 }
 
 ### Man with wings

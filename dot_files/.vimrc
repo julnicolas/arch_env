@@ -248,3 +248,8 @@ finally
 	set statusline+=\ Col:%c                    " current column
 	set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor
 endtry
+
+" Uncomment for light mode
+colorscheme default
+set notermguicolors
+highlight Search ctermfg=0
