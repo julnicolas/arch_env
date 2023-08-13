@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Sets the sink to hdmi (make sure the computer is connected)
+# Does not change the default sink
+pactl set-card-profile 0 output:hdmi-stereo+input:analog-stereo
