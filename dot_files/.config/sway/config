@@ -250,6 +250,16 @@ bindsym shift+XF86AudioMute exec pulseaudio-ctl mute-input
 #
 bindsym $mod+y exec python ~/scripts/keyboard/roll_active_mapping.py
 
+#
+# Switch between light and dark terminal themes
+#
+
+# Note zshrc must be sourced otherwise terminals will be exited
+# Set dark theme to all running terminals
+bindsym $mod+d exec pkill -SIGUSR1 zsh
+# Set light theme to all running terminals
+bindsym $mod+shift+d exec pkill -SIGUSR2 zsh
+
 # Status Bar:
 #
 # Read `man 5 sway-bar` for more information about this section.

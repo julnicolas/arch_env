@@ -16,13 +16,35 @@ alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
 ### Light and Dark theme-toggle
 # Defines the type of theme in use
 # Either 'light' or 'dark'
-scheme="light"
+default_scheme="dark"
+
+load_theme_name() {
+	CUSTOM_ZSH_THEME_SCHEME="/tmp/zsh_theme_scheme"
+
+	touch "$CUSTOM_ZSH_THEME_SCHEME"
+	scheme="$(head -1 $CUSTOM_ZSH_THEME_SCHEME)"
+	if [ -z "$scheme" ]; then
+		echo "$default_scheme" > "$CUSTOM_ZSH_THEME_SCHEME"
+	fi
+	case "$scheme" in
+		dark)
+			;;
+		light)
+			;;
+		*)
+			echo "$default_scheme" > "$CUSTOM_ZSH_THEME_SCHEME"
+			scheme="$default_scheme"
+			;;
+	esac
+}
+
+load_theme_name
 
 # ZSH theme configuration
-zsh_theme_dark="dracula-julien"
-zsh_theme_light="dracula-julien-light"
-
 zsh_set_theme() {
+	zsh_theme_dark="dracula-julien"
+	zsh_theme_light="dracula-julien-light"
+
 	ZSH_THEME="$zsh_theme_dark"
 	if [ "$scheme" = "light" ]; then
 		ZSH_THEME="$zsh_theme_light"
@@ -43,23 +65,28 @@ load_theme
 
 # Toggle active theme, if it's light then
 # load dark and conversely
-toggle_theme() {
-	if [ "$scheme" = "dark" ]; then
-		scheme="light"
-	else
-		scheme="dark"
-	fi
-	load_theme
-	zsh_set_theme
+handler_set_dark_theme() {
+	echo "dark" > "$CUSTOM_ZSH_THEME_SCHEME"	
+	source ~/.zshrc
+}
+
+handler_set_light_theme() {
+	echo "light" > "$CUSTOM_ZSH_THEME_SCHEME"	
+	source ~/.zshrc
 }
 
 # Toggle theme if SIGUSR1 is received
-trap toggle_theme SIGUSR1
+trap handler_set_dark_theme SIGUSR1
+trap handler_set_light_theme SIGUSR2
 
 # Sends a signal to all open terminals to toggle
 # their theme
-toggle_all_term_themes() {
+set_all_terms_to_dark_theme() {
 	pkill -SIGUSR1 zsh
+}
+
+set_all_terms_to_light_theme() {
+	pkill -SIGUSR2 zsh
 }
 
 ### Fzf with preview mode
