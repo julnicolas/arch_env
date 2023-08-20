@@ -16,24 +16,25 @@ alias ddelta='delta --syntax-theme "Dracula" --side-by-side'
 ### Light and Dark theme-toggle
 # Defines the type of theme in use
 # Either 'light' or 'dark'
-default_scheme="dark"
+DEFAULT_SCHEME="dark"
+export SCHEME="$DEFAULT_SCHEME"
 
 load_theme_name() {
-	CUSTOM_ZSH_THEME_SCHEME="/tmp/zsh_theme_scheme"
+	CUSTOM_ZSH_THEME_SCHEME="/tmp/zsh_theme_SCHEME"
 
 	touch "$CUSTOM_ZSH_THEME_SCHEME"
-	scheme="$(head -1 $CUSTOM_ZSH_THEME_SCHEME)"
-	if [ -z "$scheme" ]; then
-		echo "$default_scheme" > "$CUSTOM_ZSH_THEME_SCHEME"
+	SCHEME="$(head -1 $CUSTOM_ZSH_THEME_SCHEME)"
+	if [ -z "$SCHEME" ]; then
+		echo "$DEFAULT_SCHEME" > "$CUSTOM_ZSH_THEME_SCHEME"
 	fi
-	case "$scheme" in
+	case "$SCHEME" in
 		dark)
 			;;
 		light)
 			;;
 		*)
-			echo "$default_scheme" > "$CUSTOM_ZSH_THEME_SCHEME"
-			scheme="$default_scheme"
+			echo "$DEFAULT_SCHEME" > "$CUSTOM_ZSH_THEME_SCHEME"
+			SCHEME="$DEFAULT_SCHEME"
 			;;
 	esac
 }
@@ -46,7 +47,7 @@ zsh_set_theme() {
 	zsh_theme_light="dracula-julien-light"
 
 	ZSH_THEME="$zsh_theme_dark"
-	if [ "$scheme" = "light" ]; then
+	if [ "$SCHEME" = "light" ]; then
 		ZSH_THEME="$zsh_theme_light"
 	fi
 }
@@ -55,9 +56,9 @@ zsh_set_theme
 
 # Loads selected dark or light theme
 load_theme() {
-	if [ "$scheme" = "dark" ];then
+	if [ "$SCHEME" = "dark" ];then
 		theme.sh dracula
-	elif [ "$scheme" = "light" ]; then
+	elif [ "$SCHEME" = "light" ]; then
 		theme.sh github-light-colorblind
 	fi
 }
@@ -99,7 +100,7 @@ fzfp() {
 	fi
 
 	local theme
-	if [ "$scheme" = "light" ]; then
+	if [ "$SCHEME" = "light" ]; then
 		theme="--theme=gruvbox-light"
 	fi
 	fzf --exact --preview="bat $theme --color always $PLANG {}"
@@ -117,10 +118,10 @@ fzft() {
 
 	TEXT_FILE="$1"
 	local theme
-	if [ "$scheme" = "light" ]; then
+	if [ "$SCHEME" = "light" ]; then
 		theme="--theme=gruvbox-light"
 	fi
-	fzf --preview="grep -A 10 {} < $TEXT_FILE | bat $scheme --color always -l man" < "$TEXT_FILE"
+	fzf --preview="grep -A 10 {} < $TEXT_FILE | bat $SCHEME --color always -l man" < "$TEXT_FILE"
 }
 
 ### Man with wings
