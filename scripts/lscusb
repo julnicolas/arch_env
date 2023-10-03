@@ -1,0 +1,156 @@
+#!/usr/bin/python
+
+""" List connected block devices on USB ports.
+Use lsusb for any other purposes.
+
+Developped in python 3.11.
+"""
+
+from dataclasses import dataclass
+from os import walk
+from sys import argv, exit
+from pathlib import PosixPath as Posix
+from typing import Optional, Tuple
+from enum import StrEnum
+
+if len(argv) > 1:
+    if argv[1].lower() in ["-h", "--help"]:
+        print("Prints connected USB block devices")
+        exit(0)
+
+class ValidationError(Exception):
+    ...
+
+class DeviceType(StrEnum):
+    usb = "usb"
+
+@dataclass
+class Device:
+    bus: str
+    port: str
+    hub_port: Optional[str]
+    manufacturer: str
+    product: str
+    block_device: str
+
+
+def collect_block_devices(t: DeviceType) -> list[Posix]:
+    """ Returns a list of full paths to block devices, filtering
+    by device type.
+    """
+    block_list_path: str = "/sys/dev/block"
+    devices: list[Posix] = []
+
+    for p, dd, _ in walk(block_list_path):
+        for d in dd:
+            d = Posix(p).joinpath(d)
+
+            # All devices here are symlink referring to live block devices with
+            # their metadata
+            if d.is_symlink():
+                symlink = d.readlink()
+
+                # Symlink is relative
+                if t in symlink.as_posix():
+                    devices.append(Posix("/sys/").joinpath(
+                        symlink.as_posix().lstrip("./")))
+
+    return devices
+
+class BlockDevicePath:
+    """ Workout Block Device Metadata out of a path to /sys/devices..."""
+    def __init__(self, path: Posix, device_type: DeviceType):
+        self._path = path
+        self._device_type = device_type
+
+    def device(self) -> Device:
+        """ Return a fully constructed Device object. """
+        root, metadata = self._part_path()
+        bus, port, hub_port = self._ports(metadata)
+
+        return Device(bus=bus,
+                        port=port,
+                        hub_port=hub_port,
+                        manufacturer=self._manufacturer(root, metadata),
+                        product=self._product(root, metadata),
+                        block_device=self._block_device(metadata))
+
+    def _part_path(self) -> Tuple[Posix, Posix]:
+        """ Returns a tupple containing (root, metadata). 
+            root: path to device type root
+            metadata: path containing all metadata for the device.
+        """
+        device_root = ""
+        for p in self._path.parents:
+            if self._device_type in p.name:
+                device_root = p
+                break
+
+        return (device_root, self._path.relative_to(device_root))
+
+    def _ports(self, metadata: Posix) -> Tuple[str, str, str]:
+        """ Returns port metadata from a metadata path. """
+        parts = metadata.parts
+
+        # Bus and hub port
+        bus: int = 0
+        port: int = 0
+        hub_port: Optional[int] = None
+        match parts[1].partition("-"):
+            case (_, "-", _) as v:
+                bus = v[0]
+                port, _, hub_port = v[2].partition(".")
+            case (_, "-", "") as v:
+                bus = v[0]
+            case _ as v:
+                print(f"ERROR - {bd.as_posix()}")
+                raise ValidationError("unsupported block device path")
+
+        return (bus, port, hub_port)
+
+    def _manufacturer(self, root: Posix, metadata: Posix) -> str:
+        """ Return device's manufacturer metadata. """
+        parts = metadata.parts
+        device_metadata = root.joinpath("/".join(parts[:2]))
+
+        manufacturer: str = ""
+        with open(device_metadata.joinpath("manufacturer").as_posix()) as f:
+            manufacturer = f.readline().strip()
+
+        return manufacturer
+
+    def _product(self, root: Posix, metadata: Posix) -> str:
+        """ Return device's product metadata. """
+        parts = metadata.parts
+        device_metadata = root.joinpath("/".join(parts[:2]))
+
+        product: str = ""
+        with open(device_metadata.joinpath("product").as_posix()) as f:
+            product = f.readline().strip()
+
+        return product
+
+    def _block_device(self, metadata: Posix):
+        """ Returns the path to the allocated block device. """
+        parts = metadata.parts
+        block_device = Posix("/dev").joinpath(parts[-1]).as_posix()
+
+        return block_device
+
+
+def fmt(devices: list[Device]) -> None:
+    """ Format devices on stdout. """
+    print("Bus\t| Port\t| Hub Port\t| Manufacturer\t| Product\t| Block Device")
+    print("-"*80)
+    for d in devices:
+        hp = d.hub_port if d.hub_port != "" else "/"
+        print(f"{d.bus}\t| {d.port}\t| {hp}\t\t| {d.manufacturer}\t| {d.product}\t| {d.block_device}")
+
+
+# Print USB devices only
+fmt(
+    map(
+        lambda d: BlockDevicePath(path=d, device_type=DeviceType.usb).device(),
+        collect_block_devices(DeviceType.usb),
+    ),
+)
