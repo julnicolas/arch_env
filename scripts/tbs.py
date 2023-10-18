@@ -212,5 +212,7 @@ def print_tables(tables: dict[str:Table]):
             for fk in t.foreign_key:
                 print(f"  -> {fk.name}")
 
+    print(f"\nCount: {len(tt)} tables")
+
 
 print_tables(tables(cli()))
