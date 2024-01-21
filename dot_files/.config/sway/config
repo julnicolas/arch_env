@@ -284,5 +284,8 @@ exec_always ~/.config/waybar/waybar.sh
 # Apps to start in floating mode
 #
 for_window [app_id=".*[Tt]hunderbird.*"] floating enable
+# Visual studio crashes on wayland because of a bug in electron 25.x.x
+# Starting in floating mode let it run
+for_window [app_id=".*[Cc]ode.*"] floating enable
 
 include /etc/sway/config.d/*
