@@ -31,9 +31,6 @@ try
 	" Syntax check
 	Plugin 'vim-syntastic/syntastic'
 	
-	" Ansible syntax highlignting and file recognition
-	Plugin 'pearofducks/ansible-vim'
-	
 	" File tree
 	" Open bar typing :NERDTree .
 	Plugin 'scrooloose/nerdtree'
@@ -84,7 +81,6 @@ try
 
 	" Enable linting with syntactic
 	" Pylint for python (filetype=python)
-	" ansible-lint for ansible (filetype=ansible or yaml.ansible)
 	set statusline+=%#warningmsg#
 	set statusline+=%{SyntasticStatuslineFlag()}
 	set statusline+=%*
