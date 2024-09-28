@@ -3,6 +3,7 @@
 # Copy this to ~/.config/sway/config and edit it to your liking.
 #
 # Read `man 5 sway` for a complete reference.
+#
 ### Variables
 #
 # Logo key. Use Mod1 for Alt.
@@ -26,6 +27,7 @@ set $menu test $(pidof kickoff | wc -l) -eq 0 && kickoff
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output * scale 3.125
 output * bg ~/images/wallpapers/vader.jpg fill
+
 #
 # Example configuration:
 #
@@ -68,6 +70,7 @@ seat * hide_cursor 5000
 # class                  border     background text       indicator
 client.focused           #615F58    #615F58    #FFFFFF    #C7C7B1
 client.focused_tab_title #494949    #494949    #FFFFFF
+client.urgent            #858CD4    #858CD4    #FFFFFF    #858CD4
 
 ### Key bindings
 #
@@ -196,6 +199,7 @@ mode "resize" {
     # up will shrink the containers height
     # down will grow the containers height
     bindsym $left resize shrink width 10px
+	# FIXME: grow also moves
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px

@@ -156,16 +156,19 @@
     color: #888888;
 }
 
+#workspaces button:hover,
+#workspaces button.focused:hover {
+	background: #665E46;
+}
+
 #workspaces button.focused {
-    /*border-color: #4c7899;*/
     border-color: #3B3A35;
     color: white;
-    /*background-color: #285577;*/
     background-color: #4F4E48;
 }
 
 #workspaces button.urgent {
-    border-color: #c9545d;
-    color: #c9545d;
+    border-color: #A8B0FF;
+    color: #A8B0FF;
 }
 
