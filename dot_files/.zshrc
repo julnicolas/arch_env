@@ -1,5 +1,4 @@
-#export PATH="~/go/bin:~/bin:~/scripts:~/.local/bin:$PATH"
-export PATH="/home/julien/scripts:/home/julien/.local/bin:$PATH"
+export PATH=~/go/bin:~/.scripts:~/.local/bin:"$PATH"
 
 # Aliases
 alias copy='wl-copy'   # copy stdin to clipboard
@@ -313,4 +312,7 @@ source $ZSH/oh-my-zsh.sh
 
 # import my created dependencies
 source ~/.shell_profiles/zsh/arch_linux/*
+
+# import gcloud tools completion
+if [ -e ~/.gcloudrc ]; then source ~/.gcloudrc; fi
 
