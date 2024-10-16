@@ -20,7 +20,7 @@ set $term foot
 # on the original workspace that the command was run on.
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 # Custom - use kickoff and run kickoff only once (singleton pattern)
-set $menu test $(pidof kickoff | wc -l) -eq 0 && kickoff
+set $menu test $(pidof kickoff | wc -l) -eq 0 && kickoff --from-file ~/.config/kickoff/apps
 
 ### Output configuration
 #
