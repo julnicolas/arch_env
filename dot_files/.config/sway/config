@@ -252,7 +252,7 @@ bindsym shift+XF86AudioMute exec pulseaudio-ctl mute-input
 #
 # Keyboard layout control
 #
-bindsym $mod+y exec python ~/scripts/keyboard/roll_active_mapping.py
+bindsym $mod+y exec python ~/.scripts/keyboard/roll_active_mapping.py
 
 #
 # Switch between light and dark terminal themes
