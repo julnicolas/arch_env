@@ -29,7 +29,7 @@ try
 	" Plugin 'ascenator/L9', {'name': 'newL9'}
 	
 	" Syntax check
-	Plugin 'vim-syntastic/syntastic'
+	" Plugin 'vim-syntastic/syntastic'
 	
 	" File tree
 	" Open bar typing :NERDTree .
@@ -51,6 +51,9 @@ try
 	" ds"   to remove double quotes on word pointed by  cursor
 	" cs'"  change surrounding ' to " on word pointed by cursor
 	Plugin 'tpope/vim-surround'
+
+	" Dracula theme
+	Plugin 'dracula/vim', { 'name': 'dracula' }
 	
 	" All of your Plugins must be added before the following line
 	call vundle#end()            " required
@@ -81,6 +84,7 @@ try
 
 	" Enable linting with syntactic
 	" Pylint for python (filetype=python)
+	" ansible-lint for ansible (filetype=ansible or yaml.ansible)
 	set statusline+=%#warningmsg#
 	set statusline+=%{SyntasticStatuslineFlag()}
 	set statusline+=%*
@@ -101,7 +105,6 @@ finally
 	set t_Co=256
 	set encoding=utf-8
 	syntax on
-	colorscheme koehler
 	hi Normal guibg=NONE ctermbg=NONE
 	highlight EndOfBuffer ctermfg=black ctermbg=NONE
 	set nu
@@ -124,10 +127,6 @@ finally
 	" yaml
 	au! BufNewFile,BufReadPost *.{yaml,yml} set filetype=yaml foldmethod=indent
 	autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-	
-	" Ansible-specific config
-	au BufRead,BufNewFile */playbooks/*.{yaml,yml} set filetype=yaml.ansible
-	au BufRead,BufNewFile */roles/*.{yaml,yml} set filetype=yaml.ansible
 	
 	" Ruby file config
 	"au BufRead,BufNewFile *.rb set expandtab
@@ -245,7 +244,13 @@ finally
 	set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor
 endtry
 
+" COLOUR THEMES
 " Uncomment for light mode
-colorscheme default
-set notermguicolors
+"colorscheme default
+"colorscheme koehler
+colorscheme dracula
+" Set background as transparent (uses terminal's bg colour)
+" Comment to use theme's background color
+highlight Normal ctermbg=NONE guibg=NONE
+"set notermguicolors
 highlight Search ctermfg=0
