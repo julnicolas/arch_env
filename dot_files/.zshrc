@@ -105,6 +105,16 @@ fzfp() {
 	fzf --exact --preview="bat $theme --color always $PLANG {}"
 }
 
+### Fzf with preview mode
+# $1 is the language parameter (-l) for bat
+# When typing Enter, file content is saved to wayland's pasteboard.
+#
+# dependencies: bat, fzf, wayland
+fzfcp() {
+	# I use will loops so that the first process to start is fzf
+	fzfp | while read f; do cat "$(echo "$(pwd)/$f")"; done | copy
+}
+
 ### Fzf with preview mode for text browsing
 # $1 is the text file to look into
 #
